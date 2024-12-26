@@ -1,0 +1,78 @@
+@import '../../../../assets/colores.scss';
+
+.seguros{
+    background-color: $color-bg;
+    height: 100%;
+    width: 100%;
+    margin-top: 69px;
+    padding: 50px 100px;
+
+    .title{
+        color: $color-texto;
+        margin-bottom: 25px;
+    }
+
+    .seguros-container {
+        height: 100%;
+        width: 100%;
+        padding-bottom: 150px;
+        display: flex;
+        gap: 35px;
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none; 
+        }
+
+        // Estilos para el manejo de de los cards para los seguros
+        .seguro-card{
+            background-color: white;
+            max-height: 37rem;
+            max-width: 20rem;
+            margin: 15px;
+
+            img{
+                height: 12rem;
+                width: 100%;
+                object-fit: cover;
+            }
+
+            .info{
+                display: flex;
+                flex-direction: column;
+                padding: 25px;
+                height: 25rem;
+
+                .tipo{
+                    margin: 5px 0;
+
+                    h6 {
+                        color: $color-fondo-perfil;
+                    }
+
+                    h2 {
+                        color: $color-texto;
+                    }
+                }
+
+                .descripcion {
+                    color: $color-texto-secundario;
+                    flex-grow: 1;
+                }
+
+                .cotizar-btn {
+                    background-color: $color-fondo-perfil;
+                    color: white;
+                    width: 100%;
+                    padding: 10px 15px;
+                    border: none;
+                    margin-top: auto;
+                }
+            }
+        }
+    }
+}
