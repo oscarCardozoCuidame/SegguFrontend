@@ -1,0 +1,15 @@
+{
+  "short_name": "Seggu",
+  "name": "Seggu",
+  "icons": [
+    {
+      "src": "./assets/logo-short.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#fdbd1b",
+  "background_color": "#ebebe7"
+}
