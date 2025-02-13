@@ -1,0 +1,47 @@
+@import '../../assets/colores.scss';
+@import '../../assets/sizeResponsive.scss';
+
+.footer {
+    background-color: $color-primario;
+    height: 10vh;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 25;
+
+    .social-links {
+        height: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        a {
+            text-decoration: none;
+            color: $color-texto;
+
+            &:hover {
+                color: $color-hover;
+            }
+        }
+    }
+}
+
+@media (max-width: calc($breakpoint-tablet - 1px)) {
+    .footer {
+        height: 5rem;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+}
+
+
+@media (min-width: $breakpoint-tablet) {
+    .footer {
+        position: sticky;  // Esto lo mantiene pegado a la parte inferior si el contenido no sobrepasa la pantalla
+        bottom: 0;
+        width: 30%;
+        height: 5rem;
+    }
+}
+
+  
