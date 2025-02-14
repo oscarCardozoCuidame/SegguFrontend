@@ -18,6 +18,10 @@
         .img-section {
             z-index: 10; /* Z-index alto para asegurar que esté por encima */
             transition: all 1s ease;
+
+            .div-img-loader{
+                overflow: hidden;
+            }
         }
 
         .loginForm {
