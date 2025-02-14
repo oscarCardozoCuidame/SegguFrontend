@@ -87,7 +87,6 @@ export const validateSegmentNewUser = (segment, formData) => {
     case 2: // Validaciones para el tercer segmento
       if (!formData.citizenship_card.trim()) errors.citizenship_card = 'La cédula de ciudadanía es obligatoria.';
       if (!/^\d+$/.test(formData.citizenship_card)) errors.citizenship_card = 'La cédula debe contener solo números.';
-      if (!formData.company.trim()) errors.company = 'La compañía es obligatoria.';
       if (!formData.role.trim()) errors.role = 'La profesión es obligatoria.';
       if (!formData.locate.trim()) errors.locate = 'La dirección es obligatoria.';
       break;
