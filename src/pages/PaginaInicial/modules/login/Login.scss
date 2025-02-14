@@ -37,7 +37,7 @@
 
 @media (min-width: calc($breakpoint-desktop - 1px)) {
     .login {
-        height: calc(100% - 5rem);
+        height: calc(100% - 4rem);
             
         .container {
             background-color: $color-terciario;
