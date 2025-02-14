@@ -19,7 +19,7 @@ const ImageLoader = ({ src, alt, className }) => {
   }, [src]);
 
   return (
-    <div>
+    <div className="div-img-loader">
       {!isLoaded && (
         <div className="loader">
           <span>Cargando imagen...</span>
