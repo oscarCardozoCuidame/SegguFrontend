@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LoginForm from './LoginForm/LoginForm';
 import RegisterForm from './RegisterForm/RegisterForm';
-import ImageLoader from '../../../../components/ImageLoader/ImageLoader';
 import './Login.scss';
 
 const Login = () => {
@@ -83,7 +82,7 @@ const Login = () => {
         <section className="img-section">
           <div className="bar bar1" />
           <div className="bar bar2" />
-          <ImageLoader src="/assets/login-img-1.jpg" alt="Login-bg" className="img-bg"></ImageLoader>
+          <img src="/assets/login-img-1.jpg" alt="Login-bg" className="img-bg" />
         </section>
       </div>
     </div>

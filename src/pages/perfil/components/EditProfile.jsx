@@ -14,6 +14,7 @@ const EditProfile = ({ user, onClose }) => {
     citizenship_card: user.citizenship_card || '',
     birth_date: user.birth_date || '',
     locate: user.locate || '',
+    company: user.company || '',
     role: user.role || '',
   });
 
@@ -99,6 +100,14 @@ const EditProfile = ({ user, onClose }) => {
             name="citizenship_card"
             value={userData.citizenship_card}
             span="Cedula de Identidad"
+            inputClass="input-field"
+            onChange={handleChange}
+          />
+          <InputText
+            type="text"
+            name="company"
+            value={userData.company}
+            span="Compañía"
             inputClass="input-field"
             onChange={handleChange}
           />

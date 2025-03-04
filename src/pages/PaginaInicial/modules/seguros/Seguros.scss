@@ -1,10 +1,6 @@
 @import '../../../../assets/colores.scss';
 @import '../../../../assets/sizeResponsive.scss';
 
-main{
-    overflow: scroll;
-}
-
 .seguros{
     background-color: $color-bg;
     height: 100%;
@@ -26,11 +22,6 @@ main{
         // Estilos para el manejo de de los cards para los seguros
         .seguro-card{
             background-color: white;
-
-            .loader{
-                height: 12rem;
-                width: 100%;
-            }
 
             img{
                 height: 12rem;
@@ -125,13 +116,12 @@ main{
     
             // Estilos para el manejo de de los cards para los seguros
             .seguro-card{
-                max-height: 30rem;
+                max-height: 37rem;
                 max-width: 20rem;
                 margin: 15px;
                 transform: scale(0.9);
 
                 .info{
-                    height: 100%;
                     width: 20rem;
                 }
             }

@@ -227,7 +227,6 @@
 
 // Estilos para dispositivos de celular
 @media (max-width: calc($breakpoint-tablet)) {
-
     .contacto-module {
 
         .contacto {
@@ -242,7 +241,7 @@
                 margin: 25px 0;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-around;
+                justify-content: space-between;
 
                 .title {
                     margin: 50px 25px -25px;

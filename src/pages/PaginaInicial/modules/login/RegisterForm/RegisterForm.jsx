@@ -22,6 +22,7 @@ const RegisterForm = ({ closeRegister }) => {
     email: '',
     password: '',
     citizenship_card: '',
+    company: '',
     role: '',
     locate: '',
     img_profile_path: '',
@@ -188,9 +189,18 @@ const RegisterForm = ({ closeRegister }) => {
           />
           <Inputs
             type="text"
+            name="company"
+            value={formData.company}
+            span="Comapñia"
+            inputClass="input"
+            onChange={handleInputChange}
+            iconName="business"
+          />
+          <Inputs
+            type="text"
             name="role"
             value={formData.role}
-            span="Profesión / Ocupación"
+            span="Profesión"
             inputClass="input"
             onChange={handleInputChange}
             iconName="business"

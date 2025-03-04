@@ -9,30 +9,13 @@ const Inicio = () => {
     <div className="pagina-inicial">
       <section className="text-section">
         <h2>¡Bienvenido!</h2>
-        <p style={{fontSize: '1.25rem'}}>  
-          Simplifica y centraliza la gestión de tus seguros en nuestra billetera digita
+        <p>
+          Simplifica y centraliza la gestión de tus seguros con nuestra billetera digital.
+          Accede fácilmente a toda su información de pólizas: documentos, coberturas, fechas clave y contacto con su agente, todo en un solo lugar.
+          Nuestra plataforma te brinda control y tranquilidad, ayudándote a proteger lo que más valoras.
         </p>
 
         <div className="cards-section">
-        <div className="card card-insurances">
-            <div className="content">
-              <div className="title">
-                <picture className="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-medical" viewBox="0 0 16 16">
-                    <path d="M7.5 5.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L6 7l-.549.317a.5.5 0 1 0 .5.866l.549-.317V8.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L8 7l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zm-2 4.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
-                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                  </svg>
-                </picture>
-                <h3>Seguros</h3>
-              </div>
-              <div className="info-text">
-                <p>¡Cotiza aqui tu seguro!</p>
-                <Link className="card-link" to="insurances">Ver más</Link>
-              </div>
-            </div>
-            <div className="hover-color"></div>
-          </div>
-
           <div className="card">
             <div className="content">
               <div className="title">
@@ -74,7 +57,11 @@ const Inicio = () => {
       </section>
 
       <section className="imagenes">
-        <img src="../../../assets/img-inicio.jpg" alt="Familia feliz" className="circular-image"/>
+        <ImageLoader 
+          src="../../../assets/img-inicio.jpg" 
+          alt="Familia feliz" 
+          className="circular-image"
+      />
       </section>
     </div>
   );

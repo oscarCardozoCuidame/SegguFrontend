@@ -2,17 +2,12 @@ import React, { useState, useEffect } from 'react';
 import InputText from '../../../../components/inputs/InputText';
 import InputDate from '../../../../components/inputs/InputDate';
 import InputSelect from '../../../../components/inputs/InputSelect';
+import InputImg from '../../../../components/inputs/InputImg';
 import InputFile from '../../../../components/inputs/InputFile';
 import ErrorPopUp from '../../../../components/errors/ErrorPopUp';
 import { useInsuranceService } from '../../../../services/Insurance.service';
 import { useCompaniesService } from '../../../../services/Companies.service';
-import { 
-  validateInsuranceForm, 
-  validateHealthForm, 
-  validateHomeForm,
-  validateSoatForm,
-  validateVehicleForm
-} from '../../../../context/Validators';
+import { validateInsuranceForm, validateActiveForm, validateBeneficiaryForm } from '../../../../context/Validators';
 
 import './AddInsuranceForm.scss';
 
@@ -20,62 +15,56 @@ const AddInsuranceForm = () => {
   // Estados para los datos de los formularios
   const [insuranceFormData, setInsuranceFormData] = useState({
     user_id: '',
-    health_id: '',
-    home_id: '',
-    soat_id: '',
-    vehicle_id: '',
-    product: 'Póliza Todo Riesgo – Auto o Moto',
-    policy_number: '', 
-    renewal_date: '', 
-    coverage: '', 
-    asist: '', 
-    company_id: '', 
-  });  
-  const [healthFormData, setHealthFormData] = useState({
-    citizenship_card: '',
-    profession: '',
-    procedures: '',
-    responsibility_value: '',
-    work_city: '',
+    beneficiary_id: '',
+    active_id: '',
+    product: 'Seguro de Vida',
+    renewal_date: '',
+    description: '',
+    coverage: '',
+    asist: '',
+    category: null,
+    policy_number: '',
+    company_id: '',
   });
-  const [homeFormData, setHomeFormData] = useState({
-    citizenship_card: '',
-    property_value: '',
-    property_type: '',
-    stratum: '',
-    city: '',
-    furniture_value: '',
-    electronics_value: '',
-    computer_value: '',
-    valuables_value: '',
-  });
-  const [soatFormData, setSoatFormData] = useState({
+  const [activeFormData, setActiveFormData] = useState({
+    product: '',
     plate: '',
+    brand: '',
+    line: '',
+    model: '',
+    cylinder_capacity: '',
+    color: '',
+    service: '',
+    vehicle_class: '',
+    cabin_type: '',
+    fuel: '',
+    capacity: '',
+    engine_number: '',
+    vin: '',
+    serial_number: '',
+    chassis_number: '',
+    mobility_restriction: '',
+    armor_level: '',
+    horsepower: '',
+    import_declaration: '',
+    import_date: '',
+    doors: '',
+    registration_date: '',
+  });
+  const [beneficiaryFormData, setBeneficiaryFormData] = useState({
+    img_person: '',
+    name: '',
     citizenship_card: '',
-    address: '',
-    city: '',
+    role: '',
     email: '',
-    phone_number: '',
-  });
-  const [vehicleFormData, setVehicleFormData] = useState({
-    plate: '',
-    citizenship_card: '',
     birth_date: '',
-    city: '',
   });
-      
   const formSetters = {
     insurance: setInsuranceFormData,
-    home: setHomeFormData,
-    soat: setSoatFormData,
-    vehicle: setVehicleFormData,
-    health: setHealthFormData,
+    active: setActiveFormData,
+    beneficiary: setBeneficiaryFormData,
   };
-  const isAutoInsurance = insuranceFormData.product === 'Póliza Todo Riesgo – Auto o Moto';
-  const isResponsibilityCivil = insuranceFormData.product === 'Responsabilidad Civil Médica';
-  const isHomeInsurance = insuranceFormData.product === 'Póliza Hogar';
-  const isSoatInsurance = insuranceFormData.product === 'SOAT';
-  
+  const isAutoInsurance = insuranceFormData.product === 'Seguro de Auto';
 
 
   const { createInsurance } = useInsuranceService();
@@ -144,34 +133,27 @@ const AddInsuranceForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError([]);
-  
-    // Validación de todos los formularios
+    
     const insuranceErrors = validateInsuranceForm(insuranceFormData);
-    const healthErrors = isResponsibilityCivil ? validateHealthForm(healthFormData) : {};
-    const homeErrors = isHomeInsurance ? validateHomeForm(homeFormData) : {};
-    const soatErrors = isSoatInsurance ? validateSoatForm(soatFormData) : {};
-    const vehicleErrors = isAutoInsurance ? validateVehicleForm(vehicleFormData) : {};
-  
-    // Reuniendo todos los errores
+    const activeErrors = isAutoInsurance ? validateActiveForm(activeFormData) : {};
+    const beneficiaryErrors = !isAutoInsurance ? validateBeneficiaryForm(beneficiaryFormData) : {};
+    
     const allErrors = [
       ...Object.values(insuranceErrors).map(msg => ({ id: `insurance-${Math.random()}`, message: msg })),
-      ...Object.values(healthErrors).map(msg => ({ id: `health-${Math.random()}`, message: msg })),
-      ...Object.values(homeErrors).map(msg => ({ id: `home-${Math.random()}`, message: msg })),
-      ...Object.values(soatErrors).map(msg => ({ id: `soat-${Math.random()}`, message: msg })),
-      ...Object.values(vehicleErrors).map(msg => ({ id: `vehicle-${Math.random()}`, message: msg })),
+      ...Object.values(activeErrors).map(msg => ({ id: `active-${Math.random()}`, message: msg })),
+      ...Object.values(beneficiaryErrors).map(msg => ({ id: `beneficiary-${Math.random()}`, message: msg }))
     ];
   
-    // Si hay errores, se muestra y se detiene el envío
     if (allErrors.length > 0) {
       setError(allErrors);
       setIsSubmitting(false);
       return;
     }
-
+  
     try {
-      await createInsurance(insuranceFormData, healthFormData, homeFormData, soatFormData, vehicleFormData);
+      await createInsurance(insuranceFormData, activeFormData, beneficiaryFormData);
       alert('¡Seguro creado exitosamente!');
-    } catch (err) { 
+    } catch (err) {
       console.error('Error al crear el seguro:', err.message);
       setError([{ id: `general-${Math.random()}`, message: 'Ocurrió un error al registrar el seguro. Por favor, intenta de nuevo.' }]);
     } finally {
@@ -207,10 +189,12 @@ const AddInsuranceForm = () => {
               value={insuranceFormData.product}
               span="Tipo de Seguro"
               options={[
-                { value: 'Póliza Todo Riesgo – Auto o Moto', label: 'Póliza Todo Riesgo – Auto o Moto' },
-                { value: 'Responsabilidad Civil Médica', label: 'Responsabilidad Civil Médica' },
-                { value: 'Póliza Hogar', label: 'Póliza Hogar' },
+                { value: 'Seguro de Vida', label: 'Seguro de Vida' },
                 { value: 'SOAT', label: 'SOAT' },
+                { value: 'Póliza Todo Riesgo – Auto o Moto', label: 'Póliza Todo Riesgo – Auto o Moto' },
+                { value: 'Póliza Todo Riesgo – Moto', label: 'Póliza Todo Riesgo – Moto' },
+                { value: 'Póliza Hogar', label: 'Póliza Hogar' },
+                { value: 'Póliza Responsabilidad Civil Medica', label: 'Póliza Responsabilidad Civil Medica' },
               ]}
               onChange={(e) => handleChange(e, 'insurance')}
           />
@@ -221,6 +205,15 @@ const AddInsuranceForm = () => {
 
           <h2 className='title-insurance-form'>{insuranceFormData.product}</h2>
 
+          <InputText
+            type="text"
+            name="description"
+            value={insuranceFormData.description}
+            span="Descripcion"
+            inputClass="input-field"
+            onChange={(e) => handleChange(e, 'insurance')}
+            iconName="person"
+          />
           <InputText
             type="text"
             name="policy_number"
@@ -269,214 +262,251 @@ const AddInsuranceForm = () => {
           <hr />
           <br />
 
-          {/* Formularios Condicionales según tipo de seguro */}
+          {/* Campos específicos para Active */}
           {isAutoInsurance && (
             <>
               <InputText
                 type="text"
-                name="plate"
-                value={vehicleFormData.plate}
-                span="Placa"
+                name="product"
+                value={activeFormData.product}
+                span="Producto"
                 inputClass="input-field"
-                onChange={(e) => handleChange(e, 'vehicle')}
+                onChange={(e) => handleChange(e, 'active')}
               />
-              <InputText
-                type="text"
-                name="citizenship_card"
-                value={vehicleFormData.citizenship_card}
-                span="Documento de identidad"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'vehicle')}
-              />
-              <InputText
-                type="text"
-                name="city"
-                value={vehicleFormData.city}
-                span="Ciudad de Circulación"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'vehicle')}
-              />
-            </>
-          )}
-
-          {isResponsibilityCivil && (
-            <>
-              <InputText
-                type="text"
-                name="citizenship_card"
-                value={healthFormData.citizenship_card}
-                span="Documento de identidad"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'health')}
-              />
-              <InputText
-                type="text"
-                name="profession"
-                value={healthFormData.profession}
-                span="Actividad Profesional"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'health')}
-              />
-              <InputText
-                type="text"
-                name="procedures"
-                value={healthFormData.procedures}
-                span="Procedimientos Realizados"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'health')}
-              />
-              <InputText
-                type="text"
-                name="responsibility_value"
-                value={healthFormData.responsibility_value}
-                span="Valor de Responsabilidad"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'health')}
-              />
-              <InputText
-                type="text"
-                name="work_city"
-                value={healthFormData.work_city}
-                span="Ciudad en la que Labora"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'health')}
-              />
-            </>
-          )}
-
-          {isHomeInsurance && (
-            <>
-              <InputText
-                type="text"
-                name="citizenship_card"
-                value={homeFormData.citizenship_card}
-                span="Documento de Identidad"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="property_value"
-                value={homeFormData.property_value}
-                span="Valor Comercial Inmueble"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputSelect
-                name="property_type"
-                value={homeFormData.property_type}
-                span="Tipo de Inmueble"
-                options={[
-                  { value: 'Casa', label: 'Casa' },
-                  { value: 'Apto', label: 'Apartamento' },
-                  { value: 'Campo', label: 'Casa de Campo' },
-                ]}
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="stratum"
-                value={homeFormData.stratum}
-                span="Estrato"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="city"
-                value={homeFormData.city}
-                span="Ciudad"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="furniture_value"
-                value={homeFormData.furniture_value}
-                span="Valor Muebles y Enseres"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="electronics_value"
-                value={homeFormData.electronics_value}
-                span="Valor Electrodomésticos"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="computer_value"
-                value={homeFormData.computer_value}
-                span="Valor Equipo de Computo"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-              <InputText
-                type="text"
-                name="valuables_value"
-                value={homeFormData.valuables_value}
-                span="Valor Objetos de Valor"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'home')}
-              />
-            </>
-          )}
-
-          {isSoatInsurance && (
-            <>
               <InputText
                 type="text"
                 name="plate"
-                value={soatFormData.plate}
+                value={activeFormData.plate}
                 span="Placa"
                 inputClass="input-field"
-                onChange={(e) => handleChange(e, 'soat')}
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="brand"
+                value={activeFormData.brand}
+                span="Marca"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="line"
+                value={activeFormData.line}
+                span="Linea"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="model"
+                value={activeFormData.model}
+                span="Modelo"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="cylinder_capacity"
+                value={activeFormData.cylinder_capacity}
+                span="Cilindraje"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="color"
+                value={activeFormData.color}
+                span="Color"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="service"
+                value={activeFormData.service}
+                span="Servicio"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="vehicle_class"
+                value={activeFormData.vehicle_class}
+                span="Clase del Vehículo"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="cabin_type"
+                value={activeFormData.cabin_type}
+                span="Tipo de Cabina"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="fuel"
+                value={activeFormData.fuel}
+                span="Combustible"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="number"
+                name="capacity"
+                value={activeFormData.capacity}
+                span="Capacidad"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="engine_number"
+                value={activeFormData.engine_number}
+                span="Número de Motor"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="vin"
+                value={activeFormData.vin}
+                span="VIN"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="serial_number"
+                value={activeFormData.serial_number}
+                span="Número de Serie"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="chassis_number"
+                value={activeFormData.chassis_number}
+                span="Número de Chasis"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="mobility_restriction"
+                value={activeFormData.mobility_restriction}
+                span="Restricciones de Movilidad"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="armor_level"
+                value={activeFormData.armor_level}
+                span="Nivel de Blindaje"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="horsepower"
+                value={activeFormData.horsepower}
+                span="Potencia"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputText
+                type="text"
+                name="import_declaration"
+                value={activeFormData.import_declaration}
+                span="Declaración de Importación"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputDate
+                type="date"
+                name="import_date"
+                value={activeFormData.import_date}
+                span="Fecha de Importación"
+                inputClass="input-field"
+                onChange={(e) => handleDateChange(e, 'active')}
+              />
+              <InputText
+                type="number"
+                name="doors"
+                value={activeFormData.doors}
+                span="Cantidad de Puertas"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'active')}
+              />
+              <InputDate
+                type="date"
+                name="registration_date"
+                value={activeFormData.registration_date}
+                span="Fecha de Registro"
+                inputClass="input-field"
+                onChange={(e) => handleDateChange(e, 'active')}
+              />
+            </>
+          )}
+
+          {/* Campos específicos para Beneficiary */}
+          {!isAutoInsurance && (
+            <>
+              <InputImg
+                name="img_person"
+                value={beneficiaryFormData.img_person}
+                onChange={(base64) => handleFileChange(base64, "beneficiary", "img_person")}
+              />
+              <InputText
+                type="text"
+                name="name"
+                value={beneficiaryFormData.name}
+                span="Nombre"
+                inputClass="input-field"
+                onChange={(e) => handleChange(e, 'beneficiary')}
+                iconName="person"
               />
               <InputText
                 type="text"
                 name="citizenship_card"
-                value={soatFormData.citizenship_card}
-                span="Documento de identidad"
+                value={beneficiaryFormData.citizenship_card}
+                span="Cedula de Ciudadanía"
                 inputClass="input-field"
-                onChange={(e) => handleChange(e, 'soat')}
+                onChange={(e) => handleChange(e, 'beneficiary')}
+                iconName="document"
               />
               <InputText
                 type="text"
-                name="address"
-                value={soatFormData.address}
-                span="Dirección de Residencia"
+                name="role"
+                value={beneficiaryFormData.role}
+                span="Empleo"
                 inputClass="input-field"
-                onChange={(e) => handleChange(e, 'soat')}
-              />
-              <InputText
-                type="text"
-                name="city"
-                value={soatFormData.city}
-                span="Ciudad"
-                inputClass="input-field"
-                onChange={(e) => handleChange(e, 'soat')}
+                onChange={(e) => handleChange(e, 'beneficiary')}
+                iconName="group"
               />
               <InputText
                 type="email"
                 name="email"
-                value={soatFormData.email}
+                value={beneficiaryFormData.email}
                 span="Correo Electrónico"
                 inputClass="input-field"
-                onChange={(e) => handleChange(e, 'soat')}
+                onChange={(e) => handleChange(e, 'beneficiary')}
+                iconName="email"
               />
-              <InputText
-                type="text"
-                name="phone_number"
-                value={soatFormData.phone_number}
-                span="Número Celular"
+              <InputDate
+                type="date"
+                name="birth_date"
+                value={beneficiaryFormData.birth_date}
+                span="Fecha de Nacimiento"
                 inputClass="input-field"
-                onChange={(e) => handleChange(e, 'soat')}
+                onChange={(e) => handleDateChange(e, 'beneficiary')}
+                iconName="calendar"
               />
             </>
           )}
-
         </div>
 
         {/* Botón de envío */}

@@ -43,27 +43,11 @@
           z-index: 5;
         }
       }
-
-      .card-insurances{
-
-        h3{
-          margin-top: 15px;
-        }
-
-        .content{
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-      }
     
       .card {
         background-color: $color-terciario;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-bottom: 0.75rem solid #d4501b;
-        padding: 1.5rem;
-        flex: 1 0 200px;
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         animation: card-animation 0.5s ease;
@@ -241,13 +225,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-
-        .card-insurances{
-
-          .content{
-            flex-direction: row;
-          }
-        }
     
         .card {
           width: 100%;

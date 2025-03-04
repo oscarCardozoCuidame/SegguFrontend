@@ -14,70 +14,37 @@ export const useInsuranceService = () => {
     return response.json();
   }, [getUser]);
 
-  const createInsurance = useCallback(async (insuranceFormData, healthFormData, homeFormData, soatFormData, vehicleFormData) => {
+  const createInsurance = useCallback(async (insuranceFormData, activeFormData, beneficiaryFormData) => {
     const user = getUser();
     if (!user || !user.id) throw new Error('Usuario no autenticado');
 
     try {
-      let healthResponse = null;
-      let homeResponse = null;
-      let soatResponse = null;
-      let vehicleResponse = null;
+      let activeResponse = null;
+      let beneficiaryResponse = null;
 
-      // Crear un seguro de salud si es necesario
-      if (insuranceFormData.product === 'Responsabilidad Civil Médica') {
-        const response = await fetch(`${API_BASE_URL}/health`, {
+      // Crear un activo o beneficiario según corresponda
+      if (insuranceFormData.product === 'active') {
+        const response = await fetch(`${API_BASE_URL}/actives`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(healthFormData),
+          body: JSON.stringify(activeFormData),
         });
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(`Error al crear el seguro de salud: ${errorData.message}`);
+          throw new Error(`Error al crear el activo: ${errorData.message}`);
         }
-        healthResponse = await response.json();
-      }
-
-      // Crear un seguro de hogar si es necesario
-      if (insuranceFormData.product === 'Póliza Hogar') {
-        const response = await fetch(`${API_BASE_URL}/home`, {
+        activeResponse = await response.json();
+      } else {
+        const response = await fetch(`${API_BASE_URL}/beneficiaries`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(homeFormData),
+          body: JSON.stringify(beneficiaryFormData),
         });
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(`Error al crear el seguro de hogar: ${errorData.message}`);
+          throw new Error(`Error al crear el beneficiario: ${errorData.message}`);
         }
-        homeResponse = await response.json();
-      }
-
-      // Crear un seguro SOAT si es necesario
-      if (insuranceFormData.product === 'SOAT') {
-        const response = await fetch(`${API_BASE_URL}/soat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(soatFormData),
-        });
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`Error al crear el seguro SOAT: ${errorData.message}`);
-        }
-        soatResponse = await response.json();
-      }
-
-      // Crear un seguro de vehículo si es necesario
-      if (insuranceFormData.product === 'Póliza Todo Riesgo – Auto o Moto') {
-        const response = await fetch(`${API_BASE_URL}/vehicle`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(vehicleFormData),
-        });
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`Error al crear el seguro de vehículo: ${errorData.message}`);
-        }
-        vehicleResponse = await response.json();
+        beneficiaryResponse = await response.json();
       }
 
       // Crear el seguro
@@ -87,10 +54,8 @@ export const useInsuranceService = () => {
         body: JSON.stringify({
           ...insuranceFormData,
           user_id: user.id,
-          health_id: healthResponse?.health_id || null,
-          home_id: homeResponse?.home_id || null,
-          soat_id: soatResponse?.soat_id || null,
-          vehicle_id: vehicleResponse?.vehicle_id || null,
+          active_id: activeResponse?.active_id || null,
+          beneficiary_id: beneficiaryResponse?.beneficiary_id || null,
         }),
       });
 

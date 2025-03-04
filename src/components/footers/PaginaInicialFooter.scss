@@ -25,23 +25,23 @@
     }
 }
 
-@media (max-width: calc($breakpoint-tablet - 1px)) {
-    .footer {
-        height: 5rem;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-}
-
-
 @media (min-width: $breakpoint-tablet) {
     .footer {
-        position: sticky;  // Esto lo mantiene pegado a la parte inferior si el contenido no sobrepasa la pantalla
+        position: absolute;
         bottom: 0;
-        width: 30%;
+        right: 0;
         height: 5rem;
+        width: 30%;
+
     }
 }
 
+@media (max-width: $breakpoint-tablet) {
+    .footer {
+        height: 5rem;
+        position: relative;
+        bottom: 0;
+        transform: translate(0, -200%);
+    }
+}
   

@@ -10,15 +10,14 @@ const QuienesSomos = () => {
 
       <section className="text-section">
         <p>
-        Somos una plataforma del <strong>ecosistema
-        Insurtech</strong>, enfocada conectar clientes con
-        intermediarios de seguros a través de una
-        <strong>solución de digitalización</strong> que permita
-        comunicación, seguimiento y organización
-        de la información de aseguramiento.
-        Nuestra app permite <strong>gestionar pólizas,
-        documentos importantes y conectar</strong> con
-        agentes o agencias de seguros
+          Somos una plataforma digital, donde organizamos
+          toda tu información de seguros. Accede fácilmente
+          a tus documentos, pólizas y cotizaciones para
+          futuros aseguramientos, todo en un solo lugar.
+          Nuestra plataforma es segura y fácil de usar,
+          ofreciéndote acceso inmediato y control total
+          sobre la información que necesitas para proteger lo
+          que más valoras.
         </p>
       </section>
 

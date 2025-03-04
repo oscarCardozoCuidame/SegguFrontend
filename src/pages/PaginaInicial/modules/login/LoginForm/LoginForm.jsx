@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useAuthService } from '../../../../../services/AuthUser.service';
-import ErrorPopUp from '../../../../../components/errors/ErrorPopUp';
 import Inputs from '../../../../../components/inputs/InputText';
 import './LoginForm.scss';
 
@@ -23,22 +22,6 @@ const LoginForm = ({ onRegister }) => {
       setError(err.message);
     }
   };
-  
-  const renderErrorPopUps = () => {
-    if (error) {
-      return (
-        <ErrorPopUp
-          key={1}
-          message={"Usuario o contraseña incorrectos"} 
-          onClose={handleCloseError}
-        />
-      );
-    }
-  };
-  
-  const handleCloseError = () => {
-    setError(null); // Restablecemos el estado de error a null
-  };
 
   return (
     <form className="loginForm" onSubmit={handleLogin}>
@@ -46,7 +29,7 @@ const LoginForm = ({ onRegister }) => {
 
       <Inputs
         type="text"
-        span="Correo"
+        span="Usuario"
         name="userInput"
         value={userInput}
         placeholderClass="span-email"
@@ -66,6 +49,8 @@ const LoginForm = ({ onRegister }) => {
         iconName="password"
       />
 
+      {error && <p className="error-message">{error}</p>}
+
       <div className="buttons">
         <button type="button" className="btn btn-registro" onClick={onRegister}>
           Registro
@@ -73,10 +58,6 @@ const LoginForm = ({ onRegister }) => {
         <button type="submit" className="btn btn-ingresar">
           Ingresar
         </button>
-      </div>
-
-      <div className='errors-alert'>
-        {renderErrorPopUps()}
       </div>
     </form>
   );

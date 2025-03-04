@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 
     .container {
         background-color: $color-terciario;
@@ -18,10 +19,6 @@
         .img-section {
             z-index: 10; /* Z-index alto para asegurar que esté por encima */
             transition: all 1s ease;
-
-            .div-img-loader{
-                overflow: hidden;
-            }
         }
 
         .loginForm {
@@ -37,7 +34,6 @@
 
 @media (min-width: calc($breakpoint-desktop - 1px)) {
     .login {
-        height: calc(100% - 4rem);
             
         .container {
             background-color: $color-terciario;
@@ -54,12 +50,6 @@
                 position: absolute; /* Configurar posición absoluta para superponerse */
                 right: 0; /* Asegúrate de que esté donde debe estar */
                 transition: all 1s ease;
-
-                .loader{
-                    background-color: white;
-                    height: 100%;
-                    width: 100%;
-                }
     
                 .img-bg {
                     width: 100%;
@@ -126,11 +116,12 @@
             width: 100%;
 
             .loginForm {
+                height: 125%;
                 width: 100%;
-                margin-top: -75px;
+                align-items: center;
+                margin-top: -190px;
                 position: absolute;
                 transform: rotateY(0deg);
-                align-items: center;
             }
 
             .register-form {

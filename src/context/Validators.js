@@ -1,7 +1,8 @@
 export const validateInsuranceForm = (formData) => {
   const errors = {};
   
-  if (!formData.product.trim()) errors.product = 'El tipo de seguro es obligatorio.';
+  if (!formData.type.trim()) errors.type = 'El tipo de seguro es obligatorio.';
+  if (!formData.description.trim()) errors.description = 'La descripción es obligatoria.';
   if (!formData.policy_number.trim()) errors.policy_number = 'El número de póliza es obligatorio.';
   if (!/^\d+$/.test(formData.policy_number)) errors.policy_number = 'El número de póliza debe ser numérico.';
   if (!formData.renewal_date) errors.renewal_date = 'La fecha de renovación es obligatoria.';
@@ -9,61 +10,34 @@ export const validateInsuranceForm = (formData) => {
   return errors;
 };
 
-export const validateHealthForm = (formData) => {
+export const validateActiveForm = (formData) => {
   const errors = {};
   
-  if (!formData.citizenship_card.trim()) errors.citizenship_card = 'La cédula de ciudadanía es obligatoria.';
-  if (!/^\d+$/.test(formData.citizenship_card)) errors.citizenship_card = 'La cédula de ciudadanía debe contener solo números.';
-  if (!formData.profession.trim()) errors.profession = 'La profesión es obligatoria.';
-  if (!formData.procedures.trim()) errors.procedures = 'Los procedimientos son obligatorios.';
-  if (!formData.responsibility_value.trim()) errors.responsibility_value = 'El valor de responsabilidad es obligatorio.';
-  if (!formData.work_city.trim()) errors.work_city = 'La ciudad de trabajo es obligatoria.';
-  
-  return errors;
-};
-
-export const validateHomeForm = (formData) => {
-  const errors = {};
-
-  if (!formData.citizenship_card.trim()) errors.citizenship_card = 'La cédula de ciudadanía es obligatoria.';
-  if (!/^\d+$/.test(formData.citizenship_card)) errors.citizenship_card = 'La cédula de ciudadanía debe contener solo números.';
-  if (!formData.property_value.trim()) errors.property_value = 'El valor de la propiedad es obligatorio.';
-  if (!formData.property_type.trim()) errors.property_type = 'El tipo de propiedad es obligatorio.';
-  if (!formData.stratum.trim()) errors.stratum = 'El estrato es obligatorio.';
-  if (!formData.city.trim()) errors.city = 'La ciudad es obligatoria.';
-  if (!formData.furniture_value.trim()) errors.furniture_value = 'El valor de los muebles es obligatorio.';
-  if (!formData.electronics_value.trim()) errors.electronics_value = 'El valor de los electrónicos es obligatorio.';
-  if (!formData.computer_value.trim()) errors.computer_value = 'El valor de los computadores es obligatorio.';
-  if (!formData.valuables_value.trim()) errors.valuables_value = 'El valor de los objetos de valor es obligatorio.';
-  
-  return errors;
-};
-
-export const validateSoatForm = (formData) => {
-  const errors = {};
-
+  if (!formData.product.trim()) errors.product = 'El producto es obligatorio.';
   if (!formData.plate.trim()) errors.plate = 'La placa es obligatoria.';
+  if (!formData.brand.trim()) errors.brand = 'La marca es obligatoria.';
+  if (!formData.model.trim()) errors.model = 'El modelo es obligatorio.';
+  if (formData.capacity && isNaN(Number(formData.capacity))) {
+    errors.capacity = 'La capacidad debe ser un número.';
+  }
+  if (formData.doors && (!Number.isInteger(Number(formData.doors)) || Number(formData.doors) < 1)) {
+    errors.doors = 'La cantidad de puertas debe ser un número entero mayor a 0.';
+  }
+
+  return errors;
+};
+
+export const validateBeneficiaryForm = (formData) => {
+  const errors = {};
+  
+  if (!formData.name.trim()) errors.name = 'El nombre es obligatorio.';
   if (!formData.citizenship_card.trim()) errors.citizenship_card = 'La cédula de ciudadanía es obligatoria.';
-  if (!/^\d+$/.test(formData.citizenship_card)) errors.citizenship_card = 'La cédula de ciudadanía debe contener solo números.';
-  if (!formData.address.trim()) errors.address = 'La dirección es obligatoria.';
-  if (!formData.city.trim()) errors.city = 'La ciudad es obligatoria.';
   if (!formData.email.trim()) errors.email = 'El correo electrónico es obligatorio.';
-  if (!/^[^@]+@[^@]+\.[^@]+$/.test(formData.email)) errors.email = 'Debe ser un correo electrónico válido.';
-  if (!formData.phone_number.trim()) errors.phone_number = 'El número de teléfono es obligatorio.';
-  if (!/^\d+$/.test(formData.phone_number)) errors.phone_number = 'El número de teléfono debe ser numérico.';
-  
-  return errors;
-};
-
-export const validateVehicleForm = (formData) => {
-  const errors = {};
-
-  if (!formData.plate.trim()) errors.plate = 'La placa es obligatoria.';
-  if (!formData.citizenship_card.trim()) errors.citizenship_card = 'La cédula de ciudadanía es obligatoria.';
-  if (!/^\d+$/.test(formData.citizenship_card)) errors.citizenship_card = 'La cédula de ciudadanía debe contener solo números.';
+  if (!/^[^@]+@[^@]+\.[^@]+$/.test(formData.email)) {
+    errors.email = 'Debe ser un correo electrónico válido.';
+  }
   if (!formData.birth_date) errors.birth_date = 'La fecha de nacimiento es obligatoria.';
-  if (!formData.city.trim()) errors.city = 'La ciudad es obligatoria.';
-  
+
   return errors;
 };
 
@@ -87,6 +61,7 @@ export const validateSegmentNewUser = (segment, formData) => {
     case 2: // Validaciones para el tercer segmento
       if (!formData.citizenship_card.trim()) errors.citizenship_card = 'La cédula de ciudadanía es obligatoria.';
       if (!/^\d+$/.test(formData.citizenship_card)) errors.citizenship_card = 'La cédula debe contener solo números.';
+      if (!formData.company.trim()) errors.company = 'La compañía es obligatoria.';
       if (!formData.role.trim()) errors.role = 'La profesión es obligatoria.';
       if (!formData.locate.trim()) errors.locate = 'La dirección es obligatoria.';
       break;
